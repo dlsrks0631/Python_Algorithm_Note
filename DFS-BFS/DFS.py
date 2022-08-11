@@ -6,6 +6,7 @@
    방문하지 않은 인접노드가 없으면 스택에서 최상단 노드를 꺼냄
 3. 2번의 과정을 더 이상 수행할 수 없을 때까지 반복
 '''
+
 def dfs(graph,v,visited):
     # 현재 노드를 방문 처리
     visited[v] = True
@@ -30,4 +31,4 @@ graph = [
 
 visited = [False] * 9
 
-dfs(graph,1,visited)
+dfs(graph,1,visited)    # 시작노드는 1로 설정함
