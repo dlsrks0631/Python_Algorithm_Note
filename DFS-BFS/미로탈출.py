@@ -29,20 +29,20 @@ def bfs(x,y):
         x,y = queue.popleft()
 
         for i in range(4):
-            temp_x = x + dx[i]
-            temp_y = y + dy[i]
+            nx = x + dx[i]
+            ny = y + dy[i]
 
             # 미로 찾기 공간을 벗어났을 때 무시
-            if temp_x < 0 or temp_x >= n or temp_y < 0 or temp_y >= m:
+            if nx < 0 or nx >= n or ny < 0 or ny >= m:
                 continue
             
             # 벽일 때 무시
-            if graph[temp_x][temp_y] == 0:
+            if graph[nx][ny] == 0:
                 continue
 
-            if graph[temp_x][temp_y] == 1:
-                graph[temp_x][temp_y] = graph[x][y] + 1
-                queue.append((temp_x,temp_y))
+            if graph[nx][ny] == 1:
+                graph[nx][ny] = graph[x][y] + 1
+                queue.append((nx,ny))
 
     return graph[n-1][m-1]
 
