@@ -1,17 +1,61 @@
-import sys
+'''
+copy 
+'''
 
+from collections import deque
+import copy
+import sys
 input = sys.stdin.readline
 
-n,m = map(int,input().split())
-
-graph = [] # 맵 입력받을 곳
-n_graph = [[0] * m for _ in range(n)] # 벽을 설치하고 난 뒤 모습
-
-for _ in range(n):
-    graph.append(list(map(int,input().split())))
-
-# 방향 = [상,하,좌,우]
 dx = [-1,1,0,0]
 dy = [0,0,-1,1]
 
+def bfs():
+    queue = deque()
+    #queue에 2의 위치 전부 append
+    test_map = copy.deepcopy(lab_map)
+    for i in range(n):
+        for k in range(m):
+            if test_map[i][k] == 2:
+                queue.append((i,k))
+
+    while queue:
+        x,y = queue.popleft()
+
+        for i in range(4):
+          nx = x + dx[i]
+          ny = y + dy[i]
+          if 0 <= nx < n and 0 <= ny < m:
+            if test_map[nx][ny] == 0:
+                test_map[nx][ny] =2
+                queue.append((nx,ny))
+
+    global result
+    count = 0
+    for i in range(n):
+        for k in range(m):
+            if test_map[i][k] == 0:
+                count +=1
+
+    result = max(result, count)
+
+
+def make_wall(count):
+    if count == 3:
+        bfs()
+        return
+    for i in range(n):
+        for k in range(m):
+            if lab_map[i][k] == 0:
+                lab_map[i][k] = 1
+                make_wall(count+1)
+                lab_map[i][k] = 0
+
+
+n, m = map(int,input().split())
+lab_map = [list(map(int,input().split())) for _ in range(n)]
+
 result = 0
+make_wall(0)
+
+print(result)
