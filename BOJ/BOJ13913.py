@@ -19,6 +19,7 @@ def move(now):
     for _ in range(visited[now] + 1):
         data.append(temp)
         temp = check[temp]
+        #리스트를 문자열로 바꿔서 뒤에서부터 합침
     print(' '.join(map(str, data[::-1])))
 
 
