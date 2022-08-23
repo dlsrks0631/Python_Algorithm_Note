@@ -1,5 +1,11 @@
 '''
-copy 
+import copy
+
+복사받고 싶은 리스트 = copy.deepcopy(복사하고 싶은 리스트)
+
+a = [1,2,3,4]
+b = copy.deepcopy(a) -> b = [1,2,3,4]
+
 '''
 
 from collections import deque
