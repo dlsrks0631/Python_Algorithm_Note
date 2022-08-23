@@ -42,5 +42,4 @@ def bfs():
                 queue.append(next_node)
                 check[next_node] = now
 
-
 bfs()
