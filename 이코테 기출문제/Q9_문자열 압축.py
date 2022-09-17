@@ -37,3 +37,6 @@ def solution(s):
             compressed += prev 
         answer = min(answer,len(compressed))
     return answer
+
+
+ 
