@@ -23,8 +23,8 @@ BOJ 15686. 치킨 배달
 from itertools import combinations
 
 n,m = map(int,input().split())
-chicken = []
-house = []
+chicken = []  # 치킨집
+house = []  # 집
 
 for r in range(n):
     data = list(map(int,input().split()))
@@ -34,7 +34,7 @@ for r in range(n):
         elif data[c] == 2:
             chicken.append((r,c))
 
-candidates = list(combinations(chicken,m))
+candidates = list(combinations(chicken,m)) # 조합 라이브러리 사용
 
 def get_sum(candidate):
     result = 0
