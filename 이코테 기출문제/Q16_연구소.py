@@ -1,91 +1,77 @@
 '''
-백준 14502
-인체에 치명적인 바이러스를 연구하던 연구소에서 바이러스가 유출되었다.
-바이러스의 확산을 막기 위해 연구소에 벽을 세우려고 한다.
-연구소의 크기가 N * M인 직사각형으로 나타낼 수 있으며, 직사각형은 1*1 크기의 정사각형으로 나누어져 있다.
-연구소는 빈칸, 벽으로 이루어져 있으며, 벽은 칸 하나를 가득 차지합니다.
-일부 칸은 바이러스가 존재하며, 상하좌우로 퍼져나간다.
-새로 세울 수 있는 벽의 개수는 3개이다. 안전 영역 크기의 최댓값을 구하시오.
+!! DFS와 BFS는 언제 사용해야할까
+DFS -> 연결된 그래프를 완전 탐색하는데 활용가능
+    -> 깊이 우선탐색 알고리즘으로서 우직하게 선택한 한 루트를 파고듬
+    -> DFS는 재귀적인 특징과 백트래킹을 이용한, 모든 경우를 하나하나 전부 탐색하는 완전탐색 문제를 풀때 선호(대표적으로 조합 순열 구현)
 
-1. 아이디어
-- 벽을 3개 설치하는 모든 경우의 수를 다 계산 
-- 안전거리 영역 크기를 계산하는 함수 생성
-- DFS를 이용해 벽 3개를 설치하는 모든 경우의 수 계산
-- 벽을 3개 설치했다면 바이러스를 퍼뜨리고 안전 영역 최댓값 구하기
-- DFS 실행해 결과값 출력
+BFS -> depth(깊이)특징을 이용한 문제(대표적으로 최단경로)를 풀어야할때 선호
 
-2. 시간복잡도
-- 64C3 <= 100,000
-3. 자료구조
-- DFS 활용
++ return --> 함수의 결과값을 반환하기도 하지만 함수를 빠져나가는 기능도 한다
 '''
-
-import sys
-
-input = sys.stdin.readline
 
 n,m = map(int,input().split())
 
-graph = [] # 맵 입력받을 곳
-n_graph = [[0] * m for _ in range(n)] # 벽을 설치하고 난 뒤 모습
+data = []
+temp = [[0] * m for _ in range(n)] # 벽을 설치한 뒤 맵
 
+# 현재 맵 상태 입력 받음
 for _ in range(n):
-    graph.append(list(map(int,input().split())))
+    data.append(list(map(int,input().split())))
 
-# 방향 = [상,하,좌,우]
-dx = [-1,1,0,0]
-dy = [0,0,-1,1]
+# 방향 설정
+dx = [-1,0,1,0]
+dy = [0,1,0,-1]
 
-result = 0
-
-# 바이러스 퍼져나감
+# 바이러스 퍼뜨리기 -> DFS 활용
 def virus(x,y):
     for i in range(4):
         nx = x + dx[i]
         ny = y + dy[i]
-
-        if nx >= 0 and nx < n and ny >= 0 and ny < m:
-            if n_graph[nx][ny] == 0:
-                n_graph[nx][ny] = 2
+        
+        # 상 하 좌 우를 확인했을 때 바이러스가 퍼질 수 있으면
+        if 0 <= nx < n and 0 <= ny < m:
+            if temp[nx][ny] == 0:
+                temp[nx][ny] = 2
                 virus(nx,ny)
 
-# 영역 크기 계산
+# 안전영역 계산
 def calculate():
     score = 0
     for i in range(n):
         for j in range(m):
-            if n_graph[i][j] == 0:
+            if temp[i][j] == 0:
                 score += 1
+    
     return score
 
-# 벽을 설치하면서 안전 영역 크기 계산
-def dfs(cnt):
+result = 0
+
+def dfs(count):
     global result
 
-    if cnt == 3:
+    if count == 3:
+        # 현재 맵상태를 벽을 설치한 뒤 맵에 넣음
         for i in range(n):
             for j in range(m):
-                n_graph[i][j] = graph[i][j]
+                temp[i][j] == data[i][j]
         
+        # 벽을 설치하고
         for i in range(n):
             for j in range(m):
-                if n_graph[i][j] == 2:
+                if temp[i][j] == 2:
                     virus(i,j)
         
-        result = max(result, calculate())
-        return
+        result = max(result,calculate())
+        return # 함수를 빠져나옴
 
     for i in range(n):
         for j in range(m):
-            if graph[i][j] == 0:
-                graph[i][j] = 1
-                cnt += 1
-                dfs(cnt)
-                graph[i][j] = 0
-                cnt -= 1
+            if data[i][j] == 0:
+                data[i][j] = 1
+                count += 1
+                dfs(count)
+                data[i][j] = 0
+                count -= 1
 
 dfs(0)
 print(result)
-
-
-
